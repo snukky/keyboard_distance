@@ -10,13 +10,13 @@ class KeyboardDistance
   SHIFT_DISTANCE = 1.0
   ALT_DISTANCE = 0.5
   SPACE_DISTANCE = 2.0
-  UNKNOWN_CHAR_DISTANCE = 0.0
+  UNKNOWN_CHAR_DISTANCE = 3.0
 
   def initialize(options={})
     @layout = options[:layout] || :qwerty
     raise "Unknown layout :#{@layout}" unless KeyboardLayout.layout_defined?(@layout)
 
-    @national_keys = options[:national_keys] || false
+    @national_keys = options[:national_keys] || :polish 
     raise "Unknown national keys #{@national_keys}" unless !@national_keys ||
       KeyboardLayout.national_defined?(@national_keys)
 
@@ -29,7 +29,7 @@ class KeyboardDistance
     @max_distance = calculate_max_distance
 
     @shift_map = KeyboardLayout.build_shifted_keys_map(@layout)
-    @alt_map = KeyboardLayout.build_alted_keys_map(@national_keys)
+    @alt_map = KeyboardLayout.build_alted_keys_map(@national_keys) if @national_keys
   end
 
   def similarity(word_1, word_2)
